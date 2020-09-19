@@ -1,3 +1,4 @@
+import os
 import re
 import requests
 import shutil
@@ -9,6 +10,9 @@ from urllib.request import urlopen
 save_location = '/tmp/ebay/'
 item_id = sys.argv[1]
 url = 'https://www.ebay.com/itm/'+item_id
+
+if not os.path.exists(save_location):
+    os.makedirs(save_location)
 
 page = urlopen(url)
 html = page.read().decode("utf-8")
