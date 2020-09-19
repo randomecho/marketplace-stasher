@@ -20,33 +20,34 @@ soup = BeautifulSoup(html, "html.parser")
 
 ebay_title = soup.title.string.replace("  | eBay", '')
 
-scripts = soup.findAll('script')
+all_scripts = soup.findAll('script')
 
-carousel = scripts[18].string
+for script_block in all_scripts:
+    if script_block.string is not None and script_block.string.find('enImgCarousel') != -1:
+        carousel = script_block.string
+        carousel_start = carousel.find('new enImgCarousel')
+        carousel_end = carousel.find('var pageLayer')
+        carousel_load = carousel[carousel_start:carousel_end]
 
-carousel_start = carousel.find('new enImgCarousel')
-carousel_end = carousel.find('var pageLayer')
-carousel_load = carousel[carousel_start:carousel_end]
+        images = re.findall(r"https:[a-zA-Z0-9\\\.\~\-]+-l1600\.jpg", carousel)
 
-images = re.findall(r"https:[a-zA-Z0-9\\\.\~\-]+-l1600\.jpg", carousel)
+        i = 0
+        max_images = len(images) / 3
 
-i = 0
-max_images = len(images) / 3
+        for e in images:
+            i += 1
 
-for e in images:
-    i += 1
+            if i > max_images:
+                continue
 
-    if i > max_images:
-        continue
+            thumb = e.encode().decode('unicode-escape')
+            image_file = save_location+item_id+'-'+str(i).zfill(2)+'.jpg'
 
-    thumb = e.encode().decode('unicode-escape')
-    image_file = save_location+item_id+'-'+str(i).zfill(2)+'.jpg'
+            r = requests.get(thumb, stream = True)
+            r.raw.decode_content = True
 
-    r = requests.get(thumb, stream = True)
-    r.raw.decode_content = True
-
-    with open(image_file, 'wb') as f:
-        shutil.copyfileobj(r.raw, f)
+            with open(image_file, 'wb') as f:
+                shutil.copyfileobj(r.raw, f)
 
 
 url_desc = 'https://vi.vipr.ebaydesc.com/ws/eBayISAPI.dll?ViewItemDescV4&item='+item_id+'&t=0&excSoj=1&excTrk=1&lsite=0&ittenable=true&domain=ebay.com&descgauge=1&cspheader=1&oneClk=2&secureDesc=1'
