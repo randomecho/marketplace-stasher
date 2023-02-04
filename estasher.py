@@ -34,23 +34,18 @@ for script_block in all_scripts:
         carousel_load = carousel[carousel_start:carousel_end]
         images = re.findall(r"https:\/\/i.ebayimg.com\/images\/g\/[a-zA-Z0-9]+/s-l1600\.jpg", carousel_load)
 
-        i = 0
-        max_images = len(images) / 3
+        images_found = 0
 
         for e in images:
-            i += 1
-
-            if i > max_images:
-                continue
-
             thumb = e.encode().decode('unicode-escape')
-            image_file = save_location+item_id+'-'+str(i).zfill(2)+'.jpg'
+            image_file = save_location+item_id+'-'+str(images_found).zfill(2)+'.jpg'
 
             r = requests.get(thumb, stream = True)
             r.raw.decode_content = True
 
             with open(image_file, 'wb') as f:
                 shutil.copyfileobj(r.raw, f)
+                images_found += 1
 
 
 url_desc = 'https://vi.vipr.ebaydesc.com/ws/eBayISAPI.dll?ViewItemDescV4&item='+item_id+'&t=0&excSoj=1&excTrk=1&lsite=0&ittenable=true&domain=ebay.com&descgauge=1&cspheader=1&oneClk=2&secureDesc=1'
