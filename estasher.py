@@ -27,13 +27,12 @@ ebay_title = soup.title.string.replace("  | eBay", '')
 all_scripts = soup.findAll('script')
 
 for script_block in all_scripts:
-    if script_block.string is not None and script_block.string.find('enImgCarousel') != -1:
+    if script_block.string is not None and script_block.string.find('ZOOM_GUID') != -1:
         carousel = script_block.string
-        carousel_start = carousel.find('new enImgCarousel')
-        carousel_end = carousel.find('var pageLayer')
+        carousel_start = carousel.find('mediaList')
+        carousel_end = carousel.find('imageContainerSize')
         carousel_load = carousel[carousel_start:carousel_end]
-
-        images = re.findall(r"https:[a-zA-Z0-9\\\.\~\-]+-l1600\.jpg", carousel)
+        images = re.findall(r"https:\/\/i.ebayimg.com\/images\/g\/[a-zA-Z0-9]+/s-l1600\.jpg", carousel_load)
 
         i = 0
         max_images = len(images) / 3
