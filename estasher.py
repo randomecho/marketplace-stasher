@@ -7,6 +7,10 @@ from bs4 import BeautifulSoup
 from slugify import slugify
 from urllib.request import urlopen
 
+if len(sys.argv) != 2:
+    print("Missing item number")
+    exit()
+
 save_location = '/tmp/ebay/'
 item_id = sys.argv[1]
 url = 'https://www.ebay.com/itm/'+item_id
