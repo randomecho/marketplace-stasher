@@ -46,13 +46,18 @@ def get_images(page_source):
     return image_counter
 
 
-page = urlopen(url)
+try:
+    page = urlopen(url)
+except Exception as e:
+    print(e)
+    print("Check item number is valid: {}".format(item_id))
+    exit()
+
 html = page.read().decode("utf-8")
 soup = BeautifulSoup(html, "html.parser")
-
 ebay_title = soup.title.string.replace("  | eBay", '')
-
 images_found = get_images(soup)
+
 
 url_desc = 'https://vi.vipr.ebaydesc.com/ws/eBayISAPI.dll?ViewItemDescV4&item='+item_id+'&t=0&excSoj=1&excTrk=1&lsite=0&ittenable=true&domain=ebay.com&descgauge=1&cspheader=1&oneClk=2&secureDesc=1'
 page_desc = urlopen(url_desc)
