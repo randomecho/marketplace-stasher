@@ -54,17 +54,15 @@ except Exception as e:
     exit()
 
 html = page.read().decode("utf-8")
-soup = BeautifulSoup(html, "html.parser")
-ebay_title = soup.title.string.replace("  | eBay", '')
-images_found = get_images(soup)
-
-
+page_source = BeautifulSoup(html, "html.parser")
+ebay_title = page_source.title.string.replace("  | eBay", '')
+images_found = get_images(page_source)
 url_desc = 'https://vi.vipr.ebaydesc.com/ws/eBayISAPI.dll?ViewItemDescV4&item='+item_id+'&t=0&excSoj=1&excTrk=1&lsite=0&ittenable=true&domain=ebay.com&descgauge=1&cspheader=1&oneClk=2&secureDesc=1'
 page_desc = urlopen(url_desc)
 html_desc = page_desc.read().decode("utf-8")
-soup_desc = BeautifulSoup(html_desc, "html.parser")
+item_desc = BeautifulSoup(html_desc, "html.parser")
 
-ebay_desc = soup_desc.get_text(separator=u"\n\n").replace('eBay', '').strip()
+ebay_desc = item_desc.get_text(separator=u"\n\n").replace('eBay', '').strip()
 
 info = ebay_title + "\n\n- - - - - -\n\n" + ebay_desc
 
