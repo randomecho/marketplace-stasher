@@ -69,3 +69,9 @@ with open(desc_file, 'w') as f:
     f.write(info)
 
 f.close()
+
+if len(ebay_desc.strip()) > 0:
+    print("Saved description at {}".format(desc_file))
+
+if images_found > 0:
+    print("Saved {} images".format(images_found))
