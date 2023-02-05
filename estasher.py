@@ -28,7 +28,7 @@ def get_images(page_source):
             carousel_start = carousel.find('mediaList')
             carousel_end = carousel.find('imageContainerSize')
             carousel_load = carousel[carousel_start:carousel_end]
-            images = re.findall(r"https:\/\/i.ebayimg.com\/images\/g\/[a-zA-Z0-9]+/s-l1600\.jpg", carousel_load)
+            images = re.findall(r"https:\/\/i.ebayimg.com\/images\/g\/[a-zA-Z0-9\-~]+/s-l1600\.jpg", carousel_load)
 
             image_counter = 0
 
